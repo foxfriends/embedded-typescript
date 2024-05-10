@@ -10,7 +10,7 @@ import { Node, parse, ParseError, isParseError } from "../parser/index.js";
 
 const RESULT = "result";
 
-function compile(nodes: Node[]): string {
+function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
   let compiled = "";
   let indent = "";
   let hasPreserveIndentation = false;
@@ -29,7 +29,13 @@ function compile(nodes: Node[]): string {
           ? "Props"
           : "unknown";
         write(`${node.content}\n\n`);
-        write(`export default function (props: ${props}): string {\n`);
+        write(
+          `export default ${
+            isAsync ? "async" : ""
+          } function (props: ${props}): ${
+            isAsync ? "Promise<string>" : "string"
+          } {\n`,
+        );
         indent += "  ";
         write(`let ${RESULT} = '';\n`);
         break;
@@ -64,9 +70,7 @@ function compile(nodes: Node[]): string {
           write(`${RESULT} += ${node.content};\n`);
         } else {
           hasPreserveIndentation = true;
-          write(
-            `${RESULT} += preserveIndentation(${node.content}, '${indentation}');\n`
-          );
+          write(`${RESULT} += preserveIndentation(${node.content}, '${indentation}');\n`);
         }
         break;
       }
@@ -105,7 +109,7 @@ function compile(nodes: Node[]): string {
 
 export function compiler(
   template: string,
-  templatePath: string
+  templatePath: string,
 ): string | ParseError {
   const parsed = parse(template);
   if (isParseError(parsed)) {
@@ -121,6 +125,7 @@ export function compiler(
 /* eslint-disable */
 
 `;
-  const file = heading + compile(parsed);
+  const isAsync = templatePath.endsWith(".async.ets");
+  const file = heading + compile(parsed, { isAsync });
   return format(file, { parser: "typescript" });
 }

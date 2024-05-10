@@ -4,6 +4,7 @@ function isPresent(idx: number): boolean {
 
 export interface Node {
   type: "header" | "text" | "expression" | "statement";
+  isAsync?: boolean;
   trimAll?: boolean;
   trimOne?: boolean;
   content: string;
@@ -53,7 +54,7 @@ function stripModifierToken(token: string): string {
 }
 
 export function isParseError(
-  parsed: unknown | ParseError
+  parsed: unknown | ParseError,
 ): parsed is ParseError {
   return typeof parsed === "object" && parsed != null && "error" in parsed;
 }
@@ -126,7 +127,7 @@ export function parse(template: string): Node[] | ParseError {
   }
   const headerEndIdx = template.indexOf(
     SYMBOLS.Header,
-    headerStartIdx + SYMBOLS.Header.length
+    headerStartIdx + SYMBOLS.Header.length,
   );
   if (!isPresent(headerEndIdx)) {
     return parseError({
@@ -150,7 +151,7 @@ export function parse(template: string): Node[] | ParseError {
     type: "header",
     content: template.slice(
       headerStartIdx + SYMBOLS.Header.length,
-      headerEndIdx
+      headerEndIdx,
     ),
   });
   position = headerEndIdx + SYMBOLS.Header.length;
@@ -183,7 +184,7 @@ export function parse(template: string): Node[] | ParseError {
 
     const nextOpenIdx = template.indexOf(
       SYMBOLS.Open,
-      openIdx + SYMBOLS.Open.length
+      openIdx + SYMBOLS.Open.length,
     );
     if (isPresent(nextOpenIdx) && nextOpenIdx < closeIdx) {
       return parseError({
