@@ -71,6 +71,11 @@ function compile(nodes: Node[]): string {
         break;
       }
       case "statement": {
+        if (node.trimAll) {
+          write(`${RESULT} = ${RESULT}.trimRight();\n`);
+        } else if (node.trimOne) {
+          write(`${RESULT} = ${RESULT}.replace(/\\n$/, '');\n`);
+        }
         write(`${node.content}\n`);
         break;
       }

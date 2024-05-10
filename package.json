@@ -1,5 +1,6 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
     "build:module": "tsc",
     "clean": "rm -rf dist",

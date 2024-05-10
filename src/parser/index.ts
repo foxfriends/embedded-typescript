@@ -4,6 +4,8 @@ function isPresent(idx: number): boolean {
 
 export interface Node {
   type: "header" | "text" | "expression" | "statement";
+  trimAll?: boolean;
+  trimOne?: boolean;
   content: string;
 }
 
@@ -26,15 +28,25 @@ const SYMBOLS = {
   Open: "<%",
   Close: "%>",
   Expression: "=",
+  TrimOne: "-",
+  TrimAll: "_",
 };
 
 function isExpression(token: string): boolean {
   return token.startsWith(SYMBOLS.Expression);
 }
 
+function isTrimOne(token: string): boolean {
+  return token.startsWith(SYMBOLS.TrimOne);
+}
+
+function isTrimAll(token: string): boolean {
+  return token.startsWith(SYMBOLS.TrimAll);
+}
+
 function stripModifierToken(token: string): string {
   let stripped = token;
-  if (isExpression(token)) {
+  if (isExpression(token) || isTrimOne(token) || isTrimAll(token)) {
     stripped = stripped.slice(1);
   }
   return stripped;
@@ -202,7 +214,13 @@ export function parse(template: string): Node[] | ParseError {
         content: stripModifierToken(code),
       });
     } else {
-      parsed.push({ type: "statement", content: code });
+      parsed.push({
+        type: "statement",
+        trimAll: isTrimAll(code),
+        trimOne: isTrimOne(code),
+        content:
+          isTrimAll(code) || isTrimOne(code) ? stripModifierToken(code) : code,
+      });
     }
 
     position = closeIdx + SYMBOLS.Close.length;
