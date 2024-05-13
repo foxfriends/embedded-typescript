@@ -67,9 +67,9 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
       }
       case "expression": {
         write(
-          `${RESULT}.append(${
+          `${RESULT}.append((${
             node.content
-          }.toString(), ${node.preserveIndent.toString()});\n`
+          }).toString(), ${node.preserveIndent.toString()});\n`
         );
         break;
       }
