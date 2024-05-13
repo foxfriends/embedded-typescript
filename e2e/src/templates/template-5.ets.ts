@@ -65,9 +65,9 @@ export default function (props: Props): string {
   }
   __sb.glue();
   __sb.append("\nHello ");
-  __sb.append(props.name, false);
+  __sb.append(props.name.toString(), false);
   __sb.append(", you are ");
-  __sb.append(userMessage, false);
+  __sb.append(userMessage.toString(), false);
   __sb.append("\n");
   return __sb.string;
 }

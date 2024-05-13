@@ -44,7 +44,7 @@ export default function (props: Props): string {
   props.users.forEach(function (user) {
     __sb.glue();
     __sb.append("\nName: ");
-    __sb.append(user.name, false);
+    __sb.append(user.name.toString(), false);
     __sb.append("\n");
   });
   __sb.glue();

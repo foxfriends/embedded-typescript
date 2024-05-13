@@ -69,7 +69,7 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
         write(
           `${RESULT}.append(${
             node.content
-          }, ${node.preserveIndent.toString()});\n`
+          }.toString(), ${node.preserveIndent.toString()});\n`
         );
         break;
       }

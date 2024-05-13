@@ -54,7 +54,7 @@ export default function (props: Props): string {
     for (const user of props.users) {
       __sb.glue();
       __sb.append("\n  ");
-      __sb.append(renderUser(user).trimEnd(), true);
+      __sb.append(renderUser(user).trimEnd().toString(), true);
       __sb.append("\n");
     }
     __sb.append("\n");
@@ -63,7 +63,7 @@ export default function (props: Props): string {
   __sb.append(
     "\nThe indentation level is preserved for the rendered 'partial'.\n\nThere isn't anything special about the 'partial'. Here we used another ets template, but any\nexpression yeilding a multiline string would be treated the same.\n\n  "
   );
-  __sb.append(example, true);
+  __sb.append(example.toString(), true);
   __sb.append("\n\nThe end!\n");
   return __sb.string;
 }

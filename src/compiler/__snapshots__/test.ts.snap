@@ -44,7 +44,7 @@ class __EtsStringBuilder {
 export default async function (props: Props): Promise<string> {
   const __sb = new __EtsStringBuilder();
   __sb.append("\\nThe promise resolves to: ");
-  __sb.append(await props.promise, false);
+  __sb.append(await props.promise.toString(), false);
   __sb.append(".\\n");
   return __sb.string;
 }
@@ -98,7 +98,7 @@ export default function (props: Props): string {
   props.users.forEach(function (user) {
     __sb.glue();
     __sb.append("\\nName: ");
-    __sb.append(user.name, false);
+    __sb.append(user.name.toString(), false);
     __sb.append("\\n");
   });
   __sb.glue();
@@ -153,7 +153,7 @@ class __EtsStringBuilder {
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
   __sb.append("\\nHello ");
-  __sb.append(props.name, false);
+  __sb.append(props.name.toString(), false);
   __sb.append("!\\n");
   if (props.needsPasswordReset) {
     __sb.glue();
@@ -213,7 +213,7 @@ class __EtsStringBuilder {
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
   __sb.append("\\nHello ");
-  __sb.append(props.name, false);
+  __sb.append(props.name.toString(), false);
   __sb.append(", you are ");
   __sb.glue();
   __sb.append("\\n");
@@ -284,7 +284,7 @@ class __EtsStringBuilder {
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
   __sb.append("\\nHello ");
-  __sb.append(uppercase(props.name), false);
+  __sb.append(uppercase(props.name).toString(), false);
   __sb.append("!\\n");
   return __sb.string;
 }
@@ -359,9 +359,9 @@ export default function (props: Props): string {
   }
   __sb.glue();
   __sb.append("\\nHello ");
-  __sb.append(props.name, false);
+  __sb.append(props.name.toString(), false);
   __sb.append(", you are ");
-  __sb.append(userMessage, false);
+  __sb.append(userMessage.toString(), false);
   __sb.append("\\n");
   return __sb.string;
 }
@@ -425,7 +425,7 @@ export default function (props: Props): string {
     for (const user of props.users) {
       __sb.glue();
       __sb.append("\\n  ");
-      __sb.append(renderUser(user).trimEnd(), true);
+      __sb.append(renderUser(user).trimEnd().toString(), true);
       __sb.append("\\n");
     }
     __sb.append("\\n");
@@ -434,7 +434,7 @@ export default function (props: Props): string {
   __sb.append(
     "\\nThe indentation level is preserved for the rendered 'partial'.\\n\\nThere isn't anything special about the 'partial'. Here we used another ets template, but any\\nexpression yeilding a multiline string would be treated the same.\\n\\n  "
   );
-  __sb.append(example, true);
+  __sb.append(example.toString(), true);
   __sb.append("\\n\\nThe end!\\n");
   return __sb.string;
 }
@@ -487,11 +487,11 @@ class __EtsStringBuilder {
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
   __sb.append("\\nName: ");
-  __sb.append(props.name, false);
+  __sb.append(props.name.toString(), false);
   __sb.append("\\nEmail: ");
-  __sb.append(props.email, false);
+  __sb.append(props.email.toString(), false);
   __sb.append("\\nPhone: ");
-  __sb.append(props.phone, false);
+  __sb.append(props.phone.toString(), false);
   __sb.append("\\n");
   return __sb.string;
 }

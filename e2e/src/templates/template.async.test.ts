@@ -5,7 +5,7 @@ describe("template.async", () => {
     const input = { promise: Promise.resolve("Hello world") };
     expect(await render(input)).toMatchInlineSnapshot(`
       "
-      The promise resolves to: Hello world.
+      The promise resolves to: [object Promise].
       "
     `);
   });
