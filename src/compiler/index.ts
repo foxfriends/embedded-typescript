@@ -34,7 +34,7 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
             isAsync ? "async" : ""
           } function (props: ${props}): ${
             isAsync ? "Promise<string>" : "string"
-          } {\n`,
+          } {\n`
         );
         indent += "  ";
         write(`let ${RESULT} = '';\n`);
@@ -70,7 +70,9 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
           write(`${RESULT} += ${node.content};\n`);
         } else {
           hasPreserveIndentation = true;
-          write(`${RESULT} += preserveIndentation(${node.content}, '${indentation}');\n`);
+          write(
+            `${RESULT} += preserveIndentation(${node.content}, '${indentation}');\n`
+          );
         }
         break;
       }
@@ -109,7 +111,7 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
 
 export function compiler(
   template: string,
-  templatePath: string,
+  templatePath: string
 ): string | ParseError {
   const parsed = parse(template);
   if (isParseError(parsed)) {
