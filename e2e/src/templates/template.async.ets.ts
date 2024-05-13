@@ -10,10 +10,38 @@ interface Props {
   promise: Promise<string>;
 }
 
+class __EtsStringBuilder {
+  string: string = "";
+  isGlue: boolean = false;
+  glue() {
+    this.isGlue = true;
+  }
+  append(string: string, preserveIndent: boolean = false) {
+    if (this.isGlue && string.startsWith("\n")) {
+      string = string.slice(1);
+    }
+    if (preserveIndent) {
+      const indent = this.indent;
+      const parts = string.split("\n");
+      this.string += parts[0];
+      for (const part of parts.slice(1)) {
+        this.string += "\n" + " ".repeat(indent) + part;
+      }
+    } else {
+      this.string += string;
+    }
+    this.isGlue = false;
+  }
+  get indent() {
+    const parts = this.string.split("\n");
+    return parts[parts.length - 1].length;
+  }
+}
+
 export default async function (props: Props): Promise<string> {
-  let result = "";
-  result += "The promise resolves to: ";
-  result += await props.promise;
-  result += ".";
-  return result;
+  const __sb = new __EtsStringBuilder();
+  __sb.append("\nThe promise resolves to: ");
+  __sb.append(await props.promise, false);
+  __sb.append(".\n");
+  return __sb.string;
 }

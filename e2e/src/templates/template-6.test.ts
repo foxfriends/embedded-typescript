@@ -9,12 +9,13 @@ describe("template-6", () => {
       ],
     };
     expect(render(input)).toMatchInlineSnapshot(`
-      "Here is a list of users:
-
+      "
+      Here is a list of users:
+        
         Name: Tate
         Email: tate@tate.com
         Phone: 888-888-8888
-
+        
         Name: Emily
         Email: emily@emily.com
         Phone: 777-777-7777
@@ -29,13 +30,15 @@ describe("template-6", () => {
         3
         4
 
-      The end!"
+      The end!
+      "
     `);
   });
 
   it("renders OUTPUT2", () => {
     expect(render({ users: [] })).toMatchInlineSnapshot(`
-      "The indentation level is preserved for the rendered 'partial'.
+      "
+      The indentation level is preserved for the rendered 'partial'.
 
       There isn't anything special about the 'partial'. Here we used another ets template, but any
       expression yeilding a multiline string would be treated the same.
@@ -45,7 +48,8 @@ describe("template-6", () => {
         3
         4
 
-      The end!"
+      The end!
+      "
     `);
   });
 });

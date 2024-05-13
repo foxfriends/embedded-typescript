@@ -5,6 +5,6 @@ export interface Props {
 }
 ---
 Hello <%= props.name %>!
-<% if (props.needsPasswordReset) { %>
+<% if (props.needsPasswordReset) { %><>
 You need to update your password.
-<% } %>
+<% } %><>

@@ -4,7 +4,8 @@ describe("template-2", () => {
   it("renders OUTPUT1", () => {
     const input = { name: "Tate", needsPasswordReset: false };
     expect(render(input)).toMatchInlineSnapshot(`
-      "Hello Tate!
+      "
+      Hello Tate!
       "
     `);
   });
@@ -12,7 +13,8 @@ describe("template-2", () => {
   it("renders OUTPUT2", () => {
     const input = { name: "Tate", needsPasswordReset: true };
     expect(render(input)).toMatchInlineSnapshot(`
-      "Hello Tate!
+      "
+      Hello Tate!
       You need to update your password.
       "
     `);

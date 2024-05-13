@@ -11,19 +11,17 @@ const example =
 3
 4`;
 ---
-<% if (props.users.length > 0) { %>
+<% if (props.users.length > 0) { %><>
 Here is a list of users:
-  <% props.users.forEach(function(user) { %>
-
-  <%= renderUser(user) %>
-  <% }) %>
-
+<% for (const user of props.users) { %><>
+  <%| renderUser(user).trimEnd() %>
 <% } %>
+<% } %><>
 The indentation level is preserved for the rendered 'partial'.
 
 There isn't anything special about the 'partial'. Here we used another ets template, but any
 expression yeilding a multiline string would be treated the same.
 
-  <%= example %>
+  <%| example %>
 
 The end!

@@ -10,12 +10,44 @@ export interface Props {
   users: { name: string }[];
 }
 
+class __EtsStringBuilder {
+  string: string = "";
+  isGlue: boolean = false;
+  glue() {
+    this.isGlue = true;
+  }
+  append(string: string, preserveIndent: boolean = false) {
+    if (this.isGlue && string.startsWith("\n")) {
+      string = string.slice(1);
+    }
+    if (preserveIndent) {
+      const indent = this.indent;
+      const parts = string.split("\n");
+      this.string += parts[0];
+      for (const part of parts.slice(1)) {
+        this.string += "\n" + " ".repeat(indent) + part;
+      }
+    } else {
+      this.string += string;
+    }
+    this.isGlue = false;
+  }
+  get indent() {
+    const parts = this.string.split("\n");
+    return parts[parts.length - 1].length;
+  }
+}
+
 export default function (props: Props): string {
-  let result = "";
+  const __sb = new __EtsStringBuilder();
+  __sb.append("\n");
   props.users.forEach(function (user) {
-    result += "Name: ";
-    result += user.name;
-    result += "\n";
+    __sb.glue();
+    __sb.append("\nName: ");
+    __sb.append(user.name, false);
+    __sb.append("\n");
   });
-  return result;
+  __sb.glue();
+  __sb.append("\n");
+  return __sb.string;
 }

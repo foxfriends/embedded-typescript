@@ -1,34 +1,50 @@
 import { format } from "prettier";
-import {
-  trimLeadingIndentation,
-  getLeadingIndentation,
-  trimLaggingNewline,
-  sanitizeString,
-  removeFinalNewline,
-} from "./utils/index.js";
 import { Node, parse, ParseError, isParseError } from "../parser/index.js";
 
-const RESULT = "result";
+const RESULT = "__sb";
+
+const PREFIX = String.raw`
+class __EtsStringBuilder {
+  string: string = "";
+  isGlue: boolean = false;
+  glue() { this.isGlue = true; }
+  append(string: string, preserveIndent: boolean = false) {
+    if (this.isGlue && string.startsWith("\n")) {
+      string = string.slice(1);
+    }
+    if (preserveIndent) {
+      const indent = this.indent;
+      const parts = string.split("\n");
+      this.string += parts[0];
+      for (const part of parts.slice(1)) {
+        this.string += "\n" + " ".repeat(indent) + part;
+      }
+    } else {
+      this.string += string;
+    }
+    this.isGlue = false;
+  }
+  get indent() {
+    const parts = this.string.split("\n");
+    return parts[parts.length - 1].length;
+  }
+}`.trimStart();
 
 function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
   let compiled = "";
   let indent = "";
-  let hasPreserveIndentation = false;
 
   function write(text: string): void {
     compiled += indent + text;
   }
 
-  nodes.forEach((node, idx) => {
-    const prevNode = nodes[idx - 1];
-    const nextNode = nodes[idx + 1];
-
+  for (const node of nodes) {
     switch (node.type) {
       case "header": {
         const props = /(interface|type) Props/.test(node.content)
           ? "Props"
           : "unknown";
-        write(`${node.content}\n\n`);
+        write(`${node.content}\n\n${PREFIX}\n\n`);
         write(
           `export default ${
             isAsync ? "async" : ""
@@ -37,74 +53,40 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
           } {\n`
         );
         indent += "  ";
-        write(`let ${RESULT} = '';\n`);
+        write(`const ${RESULT} = new __EtsStringBuilder();\n`);
         break;
       }
       case "text": {
-        let content = node.content;
-
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (prevNode?.type === "statement" || prevNode?.type === "header") {
-          content = trimLaggingNewline(content);
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (nextNode?.type === "statement") {
-          content = trimLeadingIndentation(content);
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (!nextNode) {
-          content = removeFinalNewline(content);
-        }
-
-        if (content) {
-          write(`${RESULT} += '${sanitizeString(content)}';\n`);
-        }
+        const content = node.content;
+        if (content) write(`${RESULT}.append(${JSON.stringify(content)});\n`);
+        break;
+      }
+      case "glue": {
+        write(`${RESULT}.glue();\n`);
         break;
       }
       case "expression": {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        const indentation = getLeadingIndentation(prevNode.content ?? "");
-        if (!indentation) {
-          write(`${RESULT} += ${node.content};\n`);
-        } else {
-          hasPreserveIndentation = true;
-          write(
-            `${RESULT} += preserveIndentation(${node.content}, '${indentation}');\n`
-          );
-        }
+        write(
+          `${RESULT}.append(${
+            node.content
+          }, ${node.preserveIndent.toString()});\n`
+        );
         break;
       }
       case "statement": {
-        if (node.trimAll) {
-          write(`${RESULT} = ${RESULT}.trimRight();\n`);
-        } else if (node.trimOne) {
-          write(`${RESULT} = ${RESULT}.replace(/\\n$/, '');\n`);
-        }
         write(`${node.content}\n`);
         break;
       }
       default: {
-        const exhaust: never = node.type;
+        const exhaust: never = node;
         return exhaust;
       }
     }
-  });
+  }
 
-  write(`return ${RESULT};\n`);
+  write(`return ${RESULT}.string;\n`);
   indent = "";
   write(`}\n`);
-
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (hasPreserveIndentation) {
-    write(`\nfunction preserveIndentation(text: string, indentation: string): string {
-      return text
-        .split("\\n")
-        .map((line, idx) => (idx === 0 ? line : indentation + line))
-        .join("\\n");
-    }`);
-  }
 
   return compiled;
 }

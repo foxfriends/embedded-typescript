@@ -17,27 +17,53 @@ const example = `1
 3
 4`;
 
-export default function (props: Props): string {
-  let result = "";
-  if (props.users.length > 0) {
-    result += "Here is a list of users:\n";
-    props.users.forEach(function (user) {
-      result += "\n  ";
-      result += preserveIndentation(renderUser(user), "  ");
-      result += "\n";
-    });
-    result += "\n";
+class __EtsStringBuilder {
+  string: string = "";
+  isGlue: boolean = false;
+  glue() {
+    this.isGlue = true;
   }
-  result +=
-    "The indentation level is preserved for the rendered 'partial'.\n\nThere isn't anything special about the 'partial'. Here we used another ets template, but any\nexpression yeilding a multiline string would be treated the same.\n\n  ";
-  result += preserveIndentation(example, "  ");
-  result += "\n\nThe end!";
-  return result;
+  append(string: string, preserveIndent: boolean = false) {
+    if (this.isGlue && string.startsWith("\n")) {
+      string = string.slice(1);
+    }
+    if (preserveIndent) {
+      const indent = this.indent;
+      const parts = string.split("\n");
+      this.string += parts[0];
+      for (const part of parts.slice(1)) {
+        this.string += "\n" + " ".repeat(indent) + part;
+      }
+    } else {
+      this.string += string;
+    }
+    this.isGlue = false;
+  }
+  get indent() {
+    const parts = this.string.split("\n");
+    return parts[parts.length - 1].length;
+  }
 }
 
-function preserveIndentation(text: string, indentation: string): string {
-  return text
-    .split("\n")
-    .map((line, idx) => (idx === 0 ? line : indentation + line))
-    .join("\n");
+export default function (props: Props): string {
+  const __sb = new __EtsStringBuilder();
+  __sb.append("\n");
+  if (props.users.length > 0) {
+    __sb.glue();
+    __sb.append("\nHere is a list of users:\n");
+    for (const user of props.users) {
+      __sb.glue();
+      __sb.append("\n  ");
+      __sb.append(renderUser(user).trimEnd(), true);
+      __sb.append("\n");
+    }
+    __sb.append("\n");
+  }
+  __sb.glue();
+  __sb.append(
+    "\nThe indentation level is preserved for the rendered 'partial'.\n\nThere isn't anything special about the 'partial'. Here we used another ets template, but any\nexpression yeilding a multiline string would be treated the same.\n\n  "
+  );
+  __sb.append(example, true);
+  __sb.append("\n\nThe end!\n");
+  return __sb.string;
 }

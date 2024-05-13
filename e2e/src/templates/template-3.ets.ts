@@ -13,28 +13,56 @@ export interface Props {
   type: AccountType;
 }
 
+class __EtsStringBuilder {
+  string: string = "";
+  isGlue: boolean = false;
+  glue() {
+    this.isGlue = true;
+  }
+  append(string: string, preserveIndent: boolean = false) {
+    if (this.isGlue && string.startsWith("\n")) {
+      string = string.slice(1);
+    }
+    if (preserveIndent) {
+      const indent = this.indent;
+      const parts = string.split("\n");
+      this.string += parts[0];
+      for (const part of parts.slice(1)) {
+        this.string += "\n" + " ".repeat(indent) + part;
+      }
+    } else {
+      this.string += string;
+    }
+    this.isGlue = false;
+  }
+  get indent() {
+    const parts = this.string.split("\n");
+    return parts[parts.length - 1].length;
+  }
+}
+
 export default function (props: Props): string {
-  let result = "";
-  result += "Hello ";
-  result += props.name;
-  result += ", you are ";
+  const __sb = new __EtsStringBuilder();
+  __sb.append("\nHello ");
+  __sb.append(props.name, false);
+  __sb.append(", you are ");
+  __sb.glue();
+  __sb.append("\n");
   switch (props.type) {
-    case "user": {
-      result += "a user!\n";
+    case "user":
+      __sb.append("a user!");
       break;
-    }
-    case "admin": {
-      result += "an admin!\n";
+    case "admin":
+      __sb.append("an admin!");
       break;
-    }
-    case "enterprise": {
-      result += "an enterprise user!\n";
+    case "enterprise":
+      __sb.append("an enterprise user!");
       break;
-    }
     default: {
       const exhaust: never = props.type;
       return exhaust;
     }
   }
-  return result;
+  __sb.append("\n");
+  return __sb.string;
 }

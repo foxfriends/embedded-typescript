@@ -26,5 +26,5 @@ switch (props.type) {
     return exhaust;
  }
 }
-%>
+%><>
 Hello <%= props.name %>, you are <%= userMessage %>
