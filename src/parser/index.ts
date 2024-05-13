@@ -46,7 +46,7 @@ export interface ParseError {
 }
 
 const SYMBOLS = {
-  Header: "---",
+  Header: "---\n",
   Open: "<%",
   Close: "%>",
   Expression: "=",

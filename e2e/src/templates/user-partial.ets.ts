@@ -42,7 +42,7 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\nName: ");
+  __sb.append("Name: ");
   __sb.append(props.name.toString(), false);
   __sb.append("\nEmail: ");
   __sb.append(props.email.toString(), false);

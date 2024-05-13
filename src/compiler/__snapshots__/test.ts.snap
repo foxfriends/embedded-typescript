@@ -43,7 +43,7 @@ class __EtsStringBuilder {
 
 export default async function (props: Props): Promise<string> {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\\nThe promise resolves to: ");
+  __sb.append("The promise resolves to: ");
   __sb.append((await props.promise).toString(), false);
   __sb.append(".\\n");
   return __sb.string;
@@ -94,7 +94,6 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\\n");
   props.users.forEach(function (user) {
     __sb.glue();
     __sb.append("\\nName: ");
@@ -152,7 +151,7 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\\nHello ");
+  __sb.append("Hello ");
   __sb.append(props.name.toString(), false);
   __sb.append("!\\n");
   if (props.needsPasswordReset) {
@@ -212,7 +211,7 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\\nHello ");
+  __sb.append("Hello ");
   __sb.append(props.name.toString(), false);
   __sb.append(", you are ");
   __sb.glue();
@@ -283,7 +282,7 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\\nHello ");
+  __sb.append("Hello ");
   __sb.append(uppercase(props.name).toString(), false);
   __sb.append("!\\n");
   return __sb.string;
@@ -337,7 +336,6 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\\n");
   let userMessage;
   switch (props.type) {
     case "user": {
@@ -418,7 +416,6 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\\n");
   if (props.users.length > 0) {
     __sb.glue();
     __sb.append("\\nHere is a list of users:\\n");
@@ -486,7 +483,7 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\\nName: ");
+  __sb.append("Name: ");
   __sb.append(props.name.toString(), false);
   __sb.append("\\nEmail: ");
   __sb.append(props.email.toString(), false);

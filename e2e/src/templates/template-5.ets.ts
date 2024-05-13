@@ -43,7 +43,6 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\n");
   let userMessage;
   switch (props.type) {
     case "user": {

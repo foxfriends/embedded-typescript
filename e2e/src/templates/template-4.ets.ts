@@ -42,7 +42,7 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\nHello ");
+  __sb.append("Hello ");
   __sb.append(uppercase(props.name).toString(), false);
   __sb.append("!\n");
   return __sb.string;

@@ -4,8 +4,7 @@ describe("template-5", () => {
   it("renders OUTPUT1", () => {
     const input = { name: "Tate", type: "user" as const };
     expect(render(input)).toMatchInlineSnapshot(`
-      "
-      Hello Tate, you are a user!
+      "Hello Tate, you are a user!
       "
     `);
   });
@@ -13,8 +12,7 @@ describe("template-5", () => {
   it("renders OUTPUT2", () => {
     const input = { name: "Tate", type: "admin" as const };
     expect(render(input)).toMatchInlineSnapshot(`
-      "
-      Hello Tate, you are an admin!
+      "Hello Tate, you are an admin!
       "
     `);
   });
@@ -22,8 +20,7 @@ describe("template-5", () => {
   it("renders OUTPUT3", () => {
     const input = { name: "Tate", type: "enterprise" as const };
     expect(render(input)).toMatchInlineSnapshot(`
-      "
-      Hello Tate, you are an enterprise user!
+      "Hello Tate, you are an enterprise user!
       "
     `);
   });

@@ -40,7 +40,6 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\n");
   props.users.forEach(function (user) {
     __sb.glue();
     __sb.append("\nName: ");

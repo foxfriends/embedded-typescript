@@ -47,7 +47,6 @@ class __EtsStringBuilder {
 
 export default function (props: Props): string {
   const __sb = new __EtsStringBuilder();
-  __sb.append("\n");
   if (props.users.length > 0) {
     __sb.glue();
     __sb.append("\nHere is a list of users:\n");
