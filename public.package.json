@@ -1,12 +1,12 @@
 {
-  "name": "embedded-typescript",
-  "version": "0.1.0",
+  "name": "@foxfriends/embedded-typescript",
+  "version": "0.2.0",
   "description": "Type safe TypeScript templates",
   "license": "MIT",
-  "author": "Tate <tatethurston@gmail.com>",
+  "author": "Cameron Eldridge <cameldridge@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tatethurston/embedded-typescript"
+    "url": "https://github.com/foxfriends/embedded-typescript"
   },
   "type": "module",
   "bin": {
