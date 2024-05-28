@@ -10,7 +10,6 @@
     "package:build": "npm install && npm run clean &&  npm run build:module && npm run package:prune && npm run package:copy:files && chmod +x dist/index.js",
     "package:copy:files": "cp ./LICENSE ./README.md dist/ && cp ./public.package.json dist/package.json",
     "package:prune": "find dist -name *.test.* | xargs rm -f",
-    "prepare": "husky install",
     "test": "jest",
     "test:ci": "test --coverage",
     "typecheck": "tsc --noEmit"
@@ -26,7 +25,6 @@
     "babel-jest": "^29.0.3",
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
-    "husky": "^8.0.1",
     "jest": "^29.0.3",
     "prettier": "^2.7.1",
     "prettier-package-json": "^2.6.4",

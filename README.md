@@ -42,14 +42,14 @@ When using a typed language, I want my templates to be type checked. For most ca
 
 ## Syntax
 
-| Syntax              | Name       | Description                                                                                                                                    |
-| ------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--- CODE ---`      | Header     | Defines code that should live outside of the generated render function. Use this to define `Props` and any `import`s, `export`s or constants.  |
-| `<%= EXPRESSION %>` | Expression | Inserts the value of an expression.                                                                                                            |
-| `<%| EXPRESSION %>` | Expression | Inserts the value of an expression. If the expression generates multiple lines, the indentation level is preserved across all resulting lines. |
-| `<% CODE %>`        | Statement  | Executes code, but does not insert a value.                                                                                                    |
-| `<>`                | Glue       | Glues this line and the next one together by deleting exactly 1 following `\n` character.                                                      |
-| `TEXT`              | Text       | Text literals are inserted as is. All white space is preserved.                                                                                |
+| Syntax              | Name           | Description                                                                                                                                   |
+| ------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--- CODE ---`      | Header         | Defines code that should live outside of the generated render function. Use this to define `Props` and any `import`s, `export`s or constants. |
+| `<%= EXPRESSION %>` | Expression     | Inserts the value of an expression.                                                                                                           |
+| `<%                 | EXPRESSION %>` | Expression                                                                                                                                    | Inserts the value of an expression. If the expression generates multiple lines, the indentation level is preserved across all resulting lines. |
+| `<% CODE %>`        | Statement      | Executes code, but does not insert a value.                                                                                                   |
+| `<>`                | Glue           | Glues this line and the next one together by deleting exactly 1 following `\n` character.                                                     |
+| `TEXT`              | Text           | Text literals are inserted as is. All white space is preserved.                                                                               |
 
 ## Examples 🚀
 
@@ -254,11 +254,11 @@ Embedded TypeScript aims to be zero config, but can be configured by creating an
 <td>
   The root directory. `.ets` files will be searched under this directory. Embedded TypeScript will recursively search all subdirectories for `.ets` files.
 
-  Defaults to the project root.
+Defaults to the project root.
 
-  Example:
+Example:
 
-  Search for `.ets` files under a directory named `src`
+Search for `.ets` files under a directory named `src`
 
     // ets.config.mjs
 
