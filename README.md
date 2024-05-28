@@ -33,10 +33,9 @@ When using a typed language, I want my templates to be type checked. For most ca
 ## Syntax
 
 | Syntax              | Name           | Description                                                                                                                                   |
-| ------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| ------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--- CODE ---`      | Header         | Defines code that should live outside of the generated render function. Use this to define `Props` and any `import`s, `export`s or constants. |
 | `<%= EXPRESSION %>` | Expression     | Inserts the value of an expression.                                                                                                           |
-| `<%| EXPRESSION %>` | Expression     | Inserts the value of an expression. If the expression generates multiple lines, the indentation level is preserved across all resulting lines.|
 | `<% CODE %>`        | Statement      | Executes code, but does not insert a value.                                                                                                   |
 | `<>`                | Glue           | Glues this line and the next one together by deleting exactly 1 following `\n` character.                                                     |
 | `TEXT`              | Text           | Text literals are inserted as is. All white space is preserved.                                                                               |
