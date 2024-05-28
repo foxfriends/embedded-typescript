@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+A template may now refer to itself recursively as the function `render(props)`.
+
 ## 0.3.0
 
 Whitespace is no longer treated specially in any way by `embedded-template`. All whitespace control must be opted into using the "glue" operator `<>`, which deletes exactly 1 following new-line character.
