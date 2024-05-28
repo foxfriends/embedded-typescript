@@ -1,12 +1,11 @@
 # Embedded TypeScript
 
-<blockquote>Type safe TypeScript templates</blockquote>
-
-<br />
+> Type safe TypeScript templates
 
 <a href="https://www.npmjs.com/package/@foxfriends/embedded-typescript">
   <img src="https://img.shields.io/npm/v/@foxfriends/embedded-typescript.svg">
 </a>
+
 <a href="https://github.com/foxfriends/embedded-typescript/blob/master/LICENSE">
   <img src="https://img.shields.io/npm/l/embedded-typescript.svg">
 </a>
