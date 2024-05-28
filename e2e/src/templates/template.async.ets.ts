@@ -38,10 +38,11 @@ class __EtsStringBuilder {
   }
 }
 
-export default async function (props: Props): Promise<string> {
+async function render(props: Props): Promise<string> {
   const __sb = new __EtsStringBuilder();
   __sb.append("The promise resolves to: ");
   __sb.append((await props.promise).toString(), false);
   __sb.append(".\n");
   return __sb.string;
 }
+export default render;

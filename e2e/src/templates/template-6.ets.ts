@@ -45,7 +45,7 @@ class __EtsStringBuilder {
   }
 }
 
-export default function (props: Props): string {
+function render(props: Props): string {
   const __sb = new __EtsStringBuilder();
   if (props.users.length > 0) {
     __sb.glue();
@@ -66,3 +66,4 @@ export default function (props: Props): string {
   __sb.append("\n\nThe end!\n");
   return __sb.string;
 }
+export default render;

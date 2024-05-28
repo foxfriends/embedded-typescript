@@ -39,7 +39,7 @@ class __EtsStringBuilder {
   }
 }
 
-export default function (props: Props): string {
+function render(props: Props): string {
   const __sb = new __EtsStringBuilder();
   __sb.append("Hello ");
   __sb.append(props.name.toString(), false);
@@ -52,3 +52,4 @@ export default function (props: Props): string {
   __sb.append("\n");
   return __sb.string;
 }
+export default render;
