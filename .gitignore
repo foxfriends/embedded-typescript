@@ -1,4 +1,3 @@
+.DS_Store
 dist
-*.vsix
-todo.txt
 node_modules

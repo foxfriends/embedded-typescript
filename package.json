@@ -5,6 +5,8 @@
   "license": "MIT",
   "author": "Cameron Eldridge <cameldridge@gmail.com>",
   "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "ets": "./index.js"
   },
@@ -13,7 +15,9 @@
     "clean": "tsc --build --clean",
     "e2e:setup": "npm run package:build && (cd e2e && npm install && npm run build)",
     "fmt": "prettier --write .",
-    "lint": "eslint .",
+    "lint": "eslint src --max-warnings 0",
+    "prepare": "tsc --build",
+    "prepublish": "tsc --build --force",
     "test": "jest",
     "test:ci": "test --coverage",
     "check": "tsc --noEmit"
@@ -49,6 +53,10 @@
     "typescript template",
     "typescript templating"
   ],
+  "engines": {
+    "node": "^18 || ^20",
+    "npm": "^9 || ^10"
+  },
   "files": [
     "dist",
     "src"
