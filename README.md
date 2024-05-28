@@ -10,15 +10,6 @@
 <a href="https://github.com/foxfriends/embedded-typescript/blob/master/LICENSE">
   <img src="https://img.shields.io/npm/l/embedded-typescript.svg">
 </a>
-<a href="https://bundlephobia.com/result?p=embedded-typescript">
-  <img src="https://img.shields.io/bundlephobia/minzip/embedded-typescript">
-</a>
-<a href="https://www.npmjs.com/package/embedded-typescript">
-  <img src="https://img.shields.io/npm/dy/embedded-typescript.svg">
-</a>
-<a href="https://github.com/foxfriends/embedded-typescript/actions/workflows/ci.yml">
-  <img src="https://github.com/foxfriends/embedded-typescript/actions/workflows/ci.yml/badge.svg">
-</a>
 
 ## What is this? 🧐
 
