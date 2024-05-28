@@ -4,10 +4,10 @@
 
 <br />
 
-<a href="https://www.npmjs.com/package/embedded-typescript">
-  <img src="https://img.shields.io/npm/v/embedded-typescript.svg">
+<a href="https://www.npmjs.com/package/@foxfriends/embedded-typescript">
+  <img src="https://img.shields.io/npm/v/@foxfriends/embedded-typescript.svg">
 </a>
-<a href="https://github.com/tatethurston/embedded-typescript/blob/master/LICENSE">
+<a href="https://github.com/foxfriends/embedded-typescript/blob/master/LICENSE">
   <img src="https://img.shields.io/npm/l/embedded-typescript.svg">
 </a>
 <a href="https://bundlephobia.com/result?p=embedded-typescript">
@@ -16,8 +16,8 @@
 <a href="https://www.npmjs.com/package/embedded-typescript">
   <img src="https://img.shields.io/npm/dy/embedded-typescript.svg">
 </a>
-<a href="https://github.com/tatethurston/embedded-typescript/actions/workflows/ci.yml">
-  <img src="https://github.com/tatethurston/embedded-typescript/actions/workflows/ci.yml/badge.svg">
+<a href="https://github.com/foxfriends/embedded-typescript/actions/workflows/ci.yml">
+  <img src="https://github.com/foxfriends/embedded-typescript/actions/workflows/ci.yml/badge.svg">
 </a>
 
 ## What is this? 🧐
@@ -32,7 +32,7 @@ Checkout the [examples](#examples-) or [play with embedded-typescript in your br
 
 1. Add this package to your project:
 
-   `npm install embedded-typescript` or `yarn add embedded-typescript`
+   `npm install @foxfriends/embedded-typescript` or `yarn add @foxfriends/embedded-typescript`
 
 ## Motivation
 
@@ -45,8 +45,10 @@ When using a typed language, I want my templates to be type checked. For most ca
 | Syntax              | Name       | Description                                                                                                                                    |
 | ------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--- CODE ---`      | Header     | Defines code that should live outside of the generated render function. Use this to define `Props` and any `import`s, `export`s or constants.  |
-| `<%= EXPRESSION %>` | Expression | Inserts the value of an expression. If the expression generates multiple lines, the indentation level is preserved across all resulting lines. |
+| `<%= EXPRESSION %>` | Expression | Inserts the value of an expression.                                                                                                            |
+| `<%| EXPRESSION %>` | Expression | Inserts the value of an expression. If the expression generates multiple lines, the indentation level is preserved across all resulting lines. |
 | `<% CODE %>`        | Statement  | Executes code, but does not insert a value.                                                                                                    |
+| `<>`                | Glue       | Glues this line and the next one together by deleting exactly 1 following `\n` character.                                                      |
 | `TEXT`              | Text       | Text literals are inserted as is. All white space is preserved.                                                                                |
 
 ## Examples 🚀
@@ -63,9 +65,9 @@ interface Props {
   }[]
 }
 ---
-<% props.users.forEach(function(user) { %>
+<% for (const user of props.users) { %><>
 Name: <%= user.name %>
-<% }) %>
+<% } %><>
 ```
 
 2. Run the compiler: `npx ets`. This will compile any files with the `.ets` extension. `my-template.ets.ts` will be generated.
@@ -122,20 +124,20 @@ const example =
 3
 4`;
 ---
-<% if (props.users.length > 0) { %>
+<% if (props.users.length > 0) { %><>
 Here is a list of users:
 
-  <% props.users.forEach(function(user) { %>
-  <%= renderUser(user) %>
-  <% }) %>
+  <% for (const user of props.users) { %><>
+  <%| renderUser(user) %>
+  <% } %><>
 
-<% } %>
-The indentation level is preserved for the rendered 'partial'.
+<% } %><>
+The indentation level may be preserved for the rendered 'partial'.
 
 There isn't anything special about the 'partial'. Here we used another `.ets` template, but any
 expression yeilding a multiline string would be treated the same.
 
-  <%= example %>
+  <%| example %>
 
 The end!
 ```
@@ -181,11 +183,15 @@ console.log(
 );
 ```
 
-Note that indentation was preserved for all lines rendered by `user-partial.ets` and all lines of the `example` variable. Any expression yielding a multi-line string rendered inside an `expresssion` block (`<%= EXPRESSION %>`) will apply the indentation across each line.
+Note that indentation was preserved for all lines rendered by `user-partial.ets` and all lines of the `example` variable due to the use of the `<%|` interpolation. Any expression yielding a multi-line string rendered inside an `expresssion` block (`<%| EXPRESSION %>`) will apply the indentation across each line.
 
 #### More Examples
 
-For more examples, take a look at the [e2e directory](https://github.com/tatethurston/embedded-typescript/blob/main/e2e). The `*.ets.ts` files are generated by the compiler from the `*.ets` template files. The corresponding `*${NAME}.test.ts` shows example usage and output.
+For more examples, take a look at the [e2e directory](https://github.com/foxfriends/embedded-typescript/blob/main/e2e). The `*.ets.ts` files are generated by the compiler from the `*.ets` template files. The corresponding `*${NAME}.test.ts` shows example usage and output.
+
+## Async partials
+
+In order to use `async`/`await` in a partial, the file extension must be `.async.ets`. The resulting template function that is generated will be an `async` function respectively, and will need to be `await`-ed when used.
 
 ## Understanding Error Messages
 
@@ -221,12 +227,10 @@ interface Props {
   users: { name: string}[];
 }
 ---
-<% props.users.forEach(function(user) { %>
+<% for (const user of props.users) { %><>
 <p>Name: <%= htmlescape(user.name) %></p>
-<% }) %>
+<% } %><>
 ```
-
-I'm not aware of any other templating systems that preserve indentation for partials and multi-line strings like Embedded TypeScript. Many templating libraries target HTML so this is not surprising, but I've found this functionality useful for text templates.
 
 ## Highlights
 
@@ -249,11 +253,11 @@ Embedded TypeScript aims to be zero config, but can be configured by creating an
   <td>source</td>
 <td>
   The root directory. `.ets` files will be searched under this directory. Embedded TypeScript will recursively search all subdirectories for `.ets` files.
- 
+
   Defaults to the project root.
- 
+
   Example:
- 
+
   Search for `.ets` files under a directory named `src`
 
     // ets.config.mjs
@@ -273,8 +277,8 @@ Embedded TypeScript aims to be zero config, but can be configured by creating an
 
 ## Contributing 👫
 
-PR's and issues welcomed! For more guidance check out [CONTRIBUTING.md](https://github.com/tatethurston/embedded-typescript/blob/master/CONTRIBUTING.md)
+PR's and issues welcomed! For more guidance check out [CONTRIBUTING.md](https://github.com/foxfriends/embedded-typescript/blob/master/CONTRIBUTING.md)
 
 ## Licensing 📃
 
-See the project's [MIT License](https://github.com/tatethurston/embedded-typescript/blob/master/LICENSE).
+See the project's [MIT License](https://github.com/foxfriends/embedded-typescript/blob/master/LICENSE).
