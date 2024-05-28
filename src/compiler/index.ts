@@ -46,9 +46,7 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
           : "unknown";
         write(`${node.content}\n\n${PREFIX}\n\n`);
         write(
-          `export default ${
-            isAsync ? "async" : ""
-          } function (props: ${props}): ${
+          `${isAsync ? "async " : ""}function render(props: ${props}): ${
             isAsync ? "Promise<string>" : "string"
           } {\n`
         );
@@ -86,7 +84,7 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
 
   write(`return ${RESULT}.string;\n`);
   indent = "";
-  write(`}\n`);
+  write("}\nexport default render;\n");
 
   return compiled;
 }

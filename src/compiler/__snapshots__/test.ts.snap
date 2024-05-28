@@ -41,13 +41,14 @@ class __EtsStringBuilder {
   }
 }
 
-export default async function (props: Props): Promise<string> {
+async function render(props: Props): Promise<string> {
   const __sb = new __EtsStringBuilder();
   __sb.append("The promise resolves to: ");
   __sb.append((await props.promise).toString(), false);
   __sb.append(".\\n");
   return __sb.string;
 }
+export default render;
 "
 `;
 
@@ -92,7 +93,7 @@ class __EtsStringBuilder {
   }
 }
 
-export default function (props: Props): string {
+function render(props: Props): string {
   const __sb = new __EtsStringBuilder();
   props.users.forEach(function (user) {
     __sb.glue();
@@ -104,6 +105,7 @@ export default function (props: Props): string {
   __sb.append("\\n");
   return __sb.string;
 }
+export default render;
 "
 `;
 
@@ -149,7 +151,7 @@ class __EtsStringBuilder {
   }
 }
 
-export default function (props: Props): string {
+function render(props: Props): string {
   const __sb = new __EtsStringBuilder();
   __sb.append("Hello ");
   __sb.append(props.name.toString(), false);
@@ -162,6 +164,7 @@ export default function (props: Props): string {
   __sb.append("\\n");
   return __sb.string;
 }
+export default render;
 "
 `;
 
@@ -209,7 +212,7 @@ class __EtsStringBuilder {
   }
 }
 
-export default function (props: Props): string {
+function render(props: Props): string {
   const __sb = new __EtsStringBuilder();
   __sb.append("Hello ");
   __sb.append(props.name.toString(), false);
@@ -234,6 +237,7 @@ export default function (props: Props): string {
   __sb.append("\\n");
   return __sb.string;
 }
+export default render;
 "
 `;
 
@@ -280,13 +284,14 @@ class __EtsStringBuilder {
   }
 }
 
-export default function (props: Props): string {
+function render(props: Props): string {
   const __sb = new __EtsStringBuilder();
   __sb.append("Hello ");
   __sb.append(uppercase(props.name).toString(), false);
   __sb.append("!\\n");
   return __sb.string;
 }
+export default render;
 "
 `;
 
@@ -334,7 +339,7 @@ class __EtsStringBuilder {
   }
 }
 
-export default function (props: Props): string {
+function render(props: Props): string {
   const __sb = new __EtsStringBuilder();
   let userMessage;
   switch (props.type) {
@@ -363,6 +368,7 @@ export default function (props: Props): string {
   __sb.append("\\n");
   return __sb.string;
 }
+export default render;
 "
 `;
 
@@ -414,7 +420,7 @@ class __EtsStringBuilder {
   }
 }
 
-export default function (props: Props): string {
+function render(props: Props): string {
   const __sb = new __EtsStringBuilder();
   if (props.users.length > 0) {
     __sb.glue();
@@ -435,6 +441,7 @@ export default function (props: Props): string {
   __sb.append("\\n\\nThe end!\\n");
   return __sb.string;
 }
+export default render;
 "
 `;
 
@@ -481,7 +488,7 @@ class __EtsStringBuilder {
   }
 }
 
-export default function (props: Props): string {
+function render(props: Props): string {
   const __sb = new __EtsStringBuilder();
   __sb.append("Name: ");
   __sb.append(props.name.toString(), false);
@@ -492,5 +499,6 @@ export default function (props: Props): string {
   __sb.append("\\n");
   return __sb.string;
 }
+export default render;
 "
 `;
