@@ -21,6 +21,7 @@ export type TextNode = {
 export type ExpressionNode = {
   type: "expression";
   preserveIndent: boolean;
+  raw: boolean;
   content: string;
 };
 
@@ -51,21 +52,43 @@ const SYMBOLS = {
   Close: "%>",
   Expression: "=",
   PreserveIndent: "|",
+  Raw: "~",
+  PreserveIndentRaw: "~|",
   Glue: "<>",
 };
 
 function isExpression(token: string): boolean {
-  return token.startsWith(SYMBOLS.Expression);
+  return (
+    token.startsWith(SYMBOLS.Expression) ||
+    token.startsWith(SYMBOLS.Raw) ||
+    token.startsWith(SYMBOLS.PreserveIndent) ||
+    token.startsWith(SYMBOLS.PreserveIndentRaw)
+  );
 }
 
-function isPreserveIndentExpression(token: string): boolean {
-  return token.startsWith(SYMBOLS.PreserveIndent);
+function isRaw(token: string): boolean {
+  return (
+    token.startsWith(SYMBOLS.Raw) || token.startsWith(SYMBOLS.PreserveIndentRaw)
+  );
+}
+
+function isPreserveIndent(token: string): boolean {
+  return (
+    token.startsWith(SYMBOLS.PreserveIndent) ||
+    token.startsWith(SYMBOLS.PreserveIndentRaw)
+  );
 }
 
 function stripModifierToken(token: string): string {
   let stripped = token;
-  if (isExpression(token) || isPreserveIndentExpression(token)) {
+  if (
+    token.startsWith(SYMBOLS.Expression) ||
+    token.startsWith(SYMBOLS.Raw) ||
+    token.startsWith(SYMBOLS.PreserveIndent)
+  ) {
     stripped = stripped.slice(1);
+  } else if (token.startsWith(SYMBOLS.PreserveIndentRaw)) {
+    stripped = stripped.slice(2);
   }
   return stripped;
 }
@@ -242,11 +265,12 @@ export function parse(template: string): Node[] | ParseError {
     const code = template
       .slice(openIndex + SYMBOLS.Open.length, closeIndex)
       .trim();
-    if (isExpression(code) || isPreserveIndentExpression(code)) {
+    if (isExpression(code)) {
       parsed.push({
         type: "expression",
         content: stripModifierToken(code),
-        preserveIndent: isPreserveIndentExpression(code),
+        preserveIndent: isPreserveIndent(code),
+        raw: isRaw(code),
       });
     } else {
       parsed.push({

@@ -30,7 +30,51 @@ class __EtsStringBuilder {
   }
 }`.trimStart();
 
-function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
+// NOTE: I copied this out of another package and adjusted slightly to make it typescript and also
+// not look like 2012.
+const HTML_ESCAPER = String.raw`
+const HTML_NEED_ESCAPE = /["'&<>]/
+function __escape(string: string): string {
+  const match = HTML_NEED_ESCAPE.exec(string)
+  if (!match) return string;
+  let html = '';
+  let index = 0;
+  let lastIndex = 0;
+  for (index = match.index; index < string.length; ++index) {
+    let escape;
+    switch (string.charCodeAt(index)) {
+      case 34: // "
+        escape = '&quot;'
+        break
+      case 38: // &
+        escape = '&amp;'
+        break
+      case 39: // '
+        escape = '&#39;'
+        break
+      case 60: // <
+        escape = '&lt;'
+        break
+      case 62: // >
+        escape = '&gt;'
+        break
+      default:
+        continue
+    }
+    if (lastIndex !== index) html += string.substring(lastIndex, index);
+    lastIndex = index + 1;
+    html += escape;
+  }
+  return lastIndex !== index
+    ? html + string.substring(lastIndex, index)
+    : html;
+}
+`;
+
+function compile(
+  nodes: Node[],
+  { isAsync, isHtml }: { isAsync: boolean; isHtml: boolean }
+): string {
   let compiled = "";
   let indent = "";
 
@@ -45,6 +89,9 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
           ? "Props"
           : "unknown";
         write(`${node.content}\n\n${PREFIX}\n\n`);
+        if (isHtml) {
+          write(`${HTML_ESCAPER}\n\n`);
+        }
         write(
           `${isAsync ? "async " : ""}function render(props: ${props}): ${
             isAsync ? "Promise<string>" : "string"
@@ -64,10 +111,12 @@ function compile(nodes: Node[], { isAsync }: { isAsync: boolean }): string {
         break;
       }
       case "expression": {
+        let string = `(${node.content}).toString()`;
+        if (isHtml && !node.raw) {
+          string = `__escape(${string})`;
+        }
         write(
-          `${RESULT}.append((${
-            node.content
-          }).toString(), ${node.preserveIndent.toString()});\n`
+          `${RESULT}.append(${string}, ${node.preserveIndent.toString()});\n`
         );
         break;
       }
@@ -107,7 +156,8 @@ export function compiler(
 /* eslint-disable */
 
 `;
-  const isAsync = templatePath.endsWith(".async.ets");
-  const file = heading + compile(parsed, { isAsync });
+  const isAsync = templatePath.includes(".async.");
+  const isHtml = templatePath.includes(".html.");
+  const file = heading + compile(parsed, { isAsync, isHtml });
   return format(file, { parser: "typescript" });
 }

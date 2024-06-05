@@ -28,18 +28,25 @@ Checkout the [examples](#examples-) or [play with embedded-typescript in your br
 
 `Hello undefined!`
 
-When using a typed language, I want my templates to be type checked. For most cases, [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) work well. If I'm writing HTML/XML, [JSX](https://www.typescriptlang.org/docs/handbook/jsx.html) works well. When I'm writing text templates, template literals quickly become difficult to maintain as the template complexity grows. I can switch to [EJS](https://ejs.co/), [handlebars](https://handlebarsjs.com/), [mustache](https://github.com/janl/mustache.js), etc, but then I lose the type safety I had with template literals. Sometimes I want the expressiveness of a templating language without losing type safety. For those cases, I wrote `embedded-typescript`.
+When using a typed language, I want my templates to be type checked. For most cases,
+[template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
+work well, but template literals quickly become difficult to maintain as the template complexity grows.
+I can switch to [EJS](https://ejs.co/), [handlebars](https://handlebarsjs.com/), [mustache](https://github.com/janl/mustache.js),
+etc, but then I lose the type safety I had with template literals. Sometimes I want the expressiveness of a templating language
+without losing type safety. For those cases, I wrote `embedded-typescript`.
 
 ## Syntax
 
-| Syntax               | Name       | Description                                                                                                                                    |
-| -------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--- CODE ---`       | Header     | Defines code that should live outside of the generated render function. Use this to define `Props` and any `import`s, `export`s or constants.  |
-| `<%= EXPRESSION %>`  | Expression | Inserts the value of an expression.                                                                                                            |
-| `<%\| EXPRESSION %>` | Expression | Inserts the value of an expression. If the expression generates multiple lines, the indentation level is preserved across all resulting lines. |
-| `<% CODE %>`         | Statement  | Executes code, but does not insert a value.                                                                                                    |
-| `<>`                 | Glue       | Glues this line and the next one together by deleting exactly 1 following `\n` character.                                                      |
-| `TEXT`               | Text       | Text literals are inserted as is. All white space is preserved.                                                                                |
+| Syntax                | Name              | Description                                                                                                                                            |
+| --------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--- CODE ---`        | Header            | Defines code that should live outside of the generated render function. Use this to define `Props` and any `import`s, `export`s or constants.          |
+| `<%= EXPRESSION %>`   | Expression        | Inserts the value of an expression. This value is escaped according to the detected file type mode.                                                    |
+| `<%~ EXPRESSION %>`   | RawExpression     | Inserts the value of an expression.                                                                                                                    |
+| `<%\| EXPRESSION %>`  | PreserveIndent    | Inserts the escaped value of an expression. If the expression generates multiple lines, the indentation level is preserved across all resulting lines. |
+| `<%~\| EXPRESSION %>` | RawPreserveIndent | Inserts the value of an expression. If the expression generates multiple lines, the indentation level is preserved across all resulting lines.         |
+| `<% CODE %>`          | Statement         | Executes code, but does not insert a value.                                                                                                            |
+| `<>`                  | Glue              | Glues this line and the next one together by deleting exactly 1 following `\n` character.                                                              |
+| `TEXT`                | Text              | Text literals are inserted as is. All white space is preserved.                                                                                        |
 
 ## Examples 🚀
 
@@ -183,6 +190,12 @@ For more examples, take a look at the [e2e directory](https://github.com/foxfrie
 
 In order to use `async`/`await` in a partial, the file extension must be `.async.ets`. The resulting template function that is generated will be an `async` function respectively, and will need to be `await`-ed when used.
 
+## HTML mode
+
+When the file extension is `.html.ets` (or `.html.async.ets` or `.async.html.ets`), the template is considered in HTML mode. The only change is to the behaviour of `<%=` and `<%|` interpolations: special characters in such interpolated strings will be HTML-escaped.
+
+If you need to output those characters un-changed (e.g. because you're embedding a partial into another partial), use `<%~` or `<%~|`.
+
 ## Understanding Error Messages
 
 The compiler will output errors when it encounters invalid syntax:
@@ -202,25 +215,6 @@ The first line is a description of the error that was encountered.
 The second line is location of the error, in `path:line:column` notation.
 
 The next 5 lines provide visual context for the error.
-
-## Notable deviations from prior art
-
-This tool specifically targets text templating, rather than HTML templating. Think: code generation, text message content (emails or SMS), etc. HTML templating is possible with this tool, but I would generally recommend JSX instead of `embedded-typescript` for HTML.
-
-The templating system does _not_ perform any HTML escaping. You can `import` any self authored or 3rd party HTML escaping utilities in your template, and call that directly on any untrusted input:
-
-```typescript
----
-import htmlescape from 'htmlescape';
-
-interface Props {
-  users: { name: string}[];
-}
----
-<% for (const user of props.users) { %><>
-<p>Name: <%= htmlescape(user.name) %></p>
-<% } %><>
-```
 
 ## Highlights
 
