@@ -1,6 +1,6 @@
 {
   "name": "@foxfriends/embedded-typescript",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Type safe TypeScript templates",
   "license": "MIT",
   "author": "Cameron Eldridge <cameldridge@gmail.com>",
